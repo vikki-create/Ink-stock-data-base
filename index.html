@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ink Stock Management System | Professional V9 - Responsive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a73e8; /* Google Blue */
+            --danger-color: #ea4335; /* Google Red */
+            --success-color: #34a853; /* Google Green */
+            --warning-color: #fbbc05; /* Google Yellow */
+            --bg-light: #f4f6f9;
+            --card-bg: white;
+            --text-dark: #3c4043;
+            --text-light: #5f6368;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        /* SECTION Styling (Card Effect) */
+        .section-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e8e8e8;
+        }
+        
+        /* 🔥 NEW: CSS GRID LAYOUT for Top Row (Responsive by default) 🔥 */
+        .top-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* 2/3 for Stock, 1/3 for Movement */
+            gap: 25px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1; /* Sections like History take full width */
+        }
+        /* End of NEW CSS GRID */
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.5em;
+            font-weight: 500;
+            margin-top: 0;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        /* --- Table Styling --- */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: left;
+            font-size: 0.95em;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            text-transform: uppercase;
+            font-weight: 500;
+            position: sticky;
+            top: 0;
+        }
+        tr:last-child td { border-bottom: none; }
+
+        .low-stock {
+            background-color: #fff5f5 !important;
+            color: var(--danger-color);
+            font-weight: 500;
+        }
+        
+        /* 🔥 NEW: Scrollable History Table Container 🔥 */
+        .history-table-container {
+            max-height: 400px; /* Set a maximum height */
+            overflow-y: auto; /* Enable vertical scroll */
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+        }
+        .history-table-container table th {
+            top: 0;
+            z-index: 10;
+        }
+
+        /* --- Input and Form Styling (Unchanged for Functionality) --- */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--text-light);
+        }
+        input[type="number"], input[type="date"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
+            outline: none;
+        }
+        
+        .min-input {
+            width: 80px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        /* --- Button Styling (Unchanged) --- */
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-btn:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-btn { background-color: var(--success-color); color: white; }
+        .use-btn { background-color: var(--danger-color); color: white; }
+        .save-btn { background-color: var(--warning-color); color: var(--text-dark); margin-top: 15px; }
+        .export-btn { background-color: var(--primary-color); color: white; }
+        .clear-btn { background-color: #6c757d; color: white; margin-left: 10px; }
+        
+        .movement-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .report-controls {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #e0e0e0;
+        }
+        
+        .history-header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        #lowStockNotification {
+            position: relative;
+            display: inline-block;
+            margin-left: 20px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            padding: 5px 10px;
+            border-radius: 50%;
+            background-color: var(--danger-color);
+            color: white;
+            font-size: 0.7em;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 0 0 2px white;
+            display: none;
+        }
+
+        /* 🔥 NEW: MEDIA QUERY for Mobile Responsiveness 🔥 */
+        @media (max-width: 900px) {
+            .top-row {
+                grid-template-columns: 1fr; /* Single column layout on small screens */
+            }
+            .section-card {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .report-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .report-controls .form-group {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1><i class="fas fa-print"></i> Ink Stock Management System</h1>
+    <p class="alert-info section-card" style="font-weight: 500; margin-bottom: 0; padding: 15px; background-color: #e3f2fd; border: 1px solid #bbdefb; color: #0d47a1;">
+        **Status:** Real-time data connected to Firebase. All changes are saved instantly.
+    </p>
+
+    <div class="top-row">
+
+        <div class="section-card stock-section">
+            <div class="history-header-controls">
+                <h2>1. Current Stock Inventory (Qty)</h2>
+                <div id="lowStockNotification">
+                    <button class="action-btn save-btn" onclick="saveStock()">💾 Save Minimum Levels</button>
+                    <span id="badgeCount" class="notification-badge">0</span>
+                </div>
+            </div>
+            
+            <table id="currentStockTable">
+                <thead>
+                    <tr>
+                        <th>Ink Type</th>
+                        <th>Stock (Qty)</th>
+                        <th>Min Alert (Qty)</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="stockTableBody">
+                    </tbody>
+            </table>
+        </div>
+
+        <div class="section-card movement-section">
+            <h2>2. Record Stock Movement</h2>
+            <div class="movement-controls">
+                
+                <div class="form-group">
+                    <label for="inkSelect">Ink Type</label>
+                    <select id="inkSelect" required>
+                        </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="printerSelect">Printer / Location</label>
+                    <select id="printerSelect" onchange="updateMovementButtons()" required>
+                        <option value="">-- Select Printer/Location --</option>
+                        <option value="Printer 1">Printer 1</option>
+                        <option value="Printer 2">Printer 2</option>
+                        <option value="General Stock">General Stock (Stock In/Out)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="movementAmount">Amount (Qty)</label>
+                    <input type="number" id="movementAmount" min="0" placeholder="Enter amount..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="movementDate">Date</label>
+                    <input type="date" id="movementDate" required>
+                </div>
+
+                <div class="movement-buttons">
+                    <button class="action-btn add-btn" id="addBtn" onclick="addStock()">➕ Stock In</button>
+                    <button class="action-btn use-btn" id="useBtn" onclick="useStock()">➖ Ink Used</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card full-width">
+        <div class="history-header-controls">
+            <h2>3. Transaction History Log</h2>
+            <div>
+                <button class="action-btn export-btn" onclick="exportCurrentHistory()">⬇️ Export Full Log</button>
+                <button class="action-btn clear-btn" onclick="clearHistory()">🧹 Clear History</button>
+            </div>
+        </div>
+        
+        <div class="history-table-container">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Ink</th>
+                        <th>Printer/Location</th>
+                        <th>Operation</th>
+                        <th>Amount (Qty)</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section-card full-width">
+        <h2>4. Date Range Report Export</h2>
+        <div class="report-controls">
+            <div class="form-group">
+                <label for="startDate">From Date:</label>
+                <input type="date" id="startDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="endDate">To Date:</label>
+                <input type="date" id="endDate" required>
+            </div>
+
+            <button class="action-btn export-btn" onclick="exportCSV()">⬇️ Download Report</button>
+        </div>
+        <p style="margin-top: 15px; color: var(--text-light); font-size: 0.9em;">
+            Select a specific date range to generate and download a CSV report of all movements.
+        </p>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+
+<script>
+    // ----------------------------------------------------------------------
+    // STEP 1: 🔥 FIREBASE CONFIGURATION (UPDATED with your details) 🔥
+    // ----------------------------------------------------------------------
+    const firebaseConfig = {
+        // Your provided details are inserted here:
+        apiKey: "AIzaSyCjCLZwaLdJ6FanrtiS3RX19vUC5RRUbRE",
+        authDomain: "ink-stock.firebaseapp.com",
+        databaseURL: "https://ink-stock-default-rtdb.firebaseio.com", // Manually added default DB URL format
+        projectId: "ink-stock",
+        storageBucket: "ink-stock.firebasestorage.app",
+        messagingSenderId: "918215954320",
+        appId: "1:918215954320:web:08b4d194528f172ece6d15",
+        measurementId: "G-J7ZKB1W0G8"
+    };
+
+    // Initialize Firebase and Database References
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = app.database();
+    const STOCK_REF = database.ref('stock');
+    const HISTORY_REF = database.ref('history');
+
+    const INITIAL_INKS = [
+        { name: "Cyan", currentStock: 0, minLevel: 10 },
+        { name: "Magenta", currentStock: 0, minLevel: 10 },
+        { name: "Yellow", currentStock: 0, minLevel: 10 },
+        { name: "Black", currentStock: 0, minLevel: 10 },
+    ];
+
+    // --- Data Load & Save Functions ---
+
+    function loadAndListenToStock() {
+        STOCK_REF.on('value', (snapshot) => {
+            let inkData;
+            if (snapshot.exists()) {
+                inkData = Object.values(snapshot.val());
+            } else {
+                inkData = INITIAL_INKS;
+                STOCK_REF.once('value', (s) => {
+                    if (!s.exists()) {
+                         saveStock(inkData); 
+                    }
+                });
+            }
+            renderStockTable(inkData);
+        }, (error) => {
+            console.error("Firebase Stock Load Error:", error);
+            // alert("Failed to load stock data from Firebase. Check your connection/rules."); // Removed alert for smoother UI load
+        });
+    }
+
+    function saveStock(dataToSave = null) {
+        const currentStockData = dataToSave || getStockDataFromTable();
+
+        const firebaseObject = currentStockData.reduce((obj, ink) => {
+            obj[ink.name] = ink;
+            return obj;
+        }, {});
+
+        STOCK_REF.set(firebaseObject)
+            .then(() => {
+                if (!dataToSave) {
+                    alert("Minimum Stock Levels saved successfully!");
+                }
+            })
+            .catch(error => {
+                console.error("Firebase Save Error:", error);
+                alert("Failed to save data to Firebase. Check your configuration and rules.");
+            });
+    }
+
+    function loadAndListenToHistory() {
+        HISTORY_REF.on('value', (snapshot) => {
+            const historyObj = snapshot.val();
+            let history = [];
+
+            if (historyObj) {
+                history = Object.values(historyObj);
+            }
+            renderHistoryTable(history.slice().reverse());
+        }, (error) => {
+            console.error("Firebase History Load Error:", error);
+        });
+    }
+
+    function clearHistory() {
+        if (confirm("⚠️ WARNING: This will permanently delete ALL recorded ink movements! Are you sure you want to proceed?")) {
+            HISTORY_REF.set(null)
+                .then(() => {
+                    alert("Ink history successfully cleared.");
+                })
+                .catch(error => {
+                    console.error("Firebase Clear Error:", error);
+                    alert("Failed to clear history from Firebase.");
+                });
+        }
+    }
+
+
+    // --- Rendering Functions ---
+    function renderStockTable(inkData) {
+        const tableBody = document.getElementById('stockTableBody');
+        tableBody.innerHTML = '';
+        const inkSelect = document.getElementById('inkSelect');
+        inkSelect.innerHTML = '<option value="">-- Select Ink Type --</option>';
+        
+        let lowStockCount = 0;
+
+        inkData.forEach(ink => {
+            const isLowStock = ink.currentStock < ink.minLevel;
+            if (isLowStock) {
+                lowStockCount++;
+            }
+            
+            const row = tableBody.insertRow();
+            row.className = isLowStock ? 'low-stock' : '';
+
+            row.insertCell().textContent = ink.name;
+            row.insertCell().textContent = parseFloat(ink.currentStock).toFixed(2);
+
+            const minCell = row.insertCell();
+            const minInput = document.createElement('input');
+            minInput.type = 'number';
+            minInput.min = '0';
+            minInput.value = ink.minLevel;
+            minInput.className = 'min-input';
+            minCell.appendChild(minInput);
+
+            const statusCell = row.insertCell();
+            statusCell.textContent = isLowStock ? "💥 LOW STOCK" : "✅ OK";
+            statusCell.style.color = isLowStock ? 'var(--danger-color)' : 'var(--success-color)';
+            statusCell.style.fontWeight = 'bold';
+
+            const option = document.createElement('option');
+            option.value = ink.name;
+            option.textContent = ink.name;
+            inkSelect.appendChild(option);
+        });
+        
+        updateLowStockBadge(lowStockCount);
+    }
+
+    function updateLowStockBadge(count) {
+        const badge = document.getElementById('badgeCount');
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'block';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    function renderHistoryTable(historyData) {
+        const tableBody = document.getElementById('historyTableBody');
+        tableBody.innerHTML = '';
+
+        historyData.forEach(log => {
+            const row = tableBody.insertRow();
+            row.insertCell().textContent = log.date;
+            row.insertCell().textContent = log.ink;
+            row.insertCell().textContent = log.printer || 'N/A';
+            
+            const operationCell = row.insertCell();
+            const operationText = log.type === 'ADD' ? 'Stock Added' : 'Stock Used';
+            operationCell.textContent = operationText;
+            
+            const amountCell = row.insertCell();
+            const displayAmount = Math.round(log.amount * 100) / 100;
+            amountCell.textContent = (log.type === 'ADD' ? '+' : '-') + displayAmount;
+            amountCell.style.color = log.type === 'ADD' ? 'var(--success-color)' : 'var(--danger-color)';
+            amountCell.style.fontWeight = '500';
+        });
+    }
+
+    // --- Dynamic Button Control Function ---
+    function updateMovementButtons() {
+        const printerSelect = document.getElementById('printerSelect').value;
+        const addBtn = document.getElementById('addBtn');
+        const useBtn = document.getElementById('useBtn');
+
+        addBtn.style.display = 'none';
+        useBtn.style.display = 'none';
+        
+        if (printerSelect === 'General Stock') {
+            addBtn.style.display = 'flex';
+            useBtn.style.display = 'flex';
+        } else if (printerSelect === 'Printer 1' || printerSelect === 'Printer 2') {
+            useBtn.style.display = 'flex';
+        }
+    }
+
+    // --- Data Handling Functions (Includes LOW STOCK ALERT) ---
+    function getStockDataFromTable() {
+        const rows = document.querySelectorAll('#stockTableBody tr');
+        return Array.from(rows).map(row => {
+            return {
+                name: row.cells[0].textContent,
+                currentStock: parseFloat(row.cells[1].textContent) || 0,
+                minLevel: parseFloat(row.querySelector('.min-input').value) || 0
+            };
+        });
+    }
+    
+    function handleMovement(type) {
+        const inkName = document.getElementById('inkSelect').value;
+        const printerName = document.getElementById('printerSelect').value;
+        const amount = parseFloat(document.getElementById('movementAmount').value);
+        const date = document.getElementById('movementDate').value;
+
+        if (!inkName || !amount || amount <= 0 || !date || !printerName) {
+            alert("Please fill in Ink Type, Printer/Location, Amount, and Date.");
+            return;
+        }
+
+        if (type === 'ADD' && printerName !== 'General Stock') {
+            alert("Stock In operations must be logged against 'General Stock'.");
+            return;
+        }
+
+        STOCK_REF.once('value', (snapshot) => {
+            if (!snapshot.exists()) return;
+
+            let currentStockObj = snapshot.val();
+            const inkKey = inkName;
+            let inkData = currentStockObj[inkKey];
+
+            if (!inkData) {
+                alert(`Ink type ${inkName} not found in database.`);
+                return;
+            }
+
+            let newStockLevel = inkData.currentStock;
+            if (type === 'ADD') {
+                newStockLevel += amount;
+            } else if (type === 'USE') {
+                if (inkData.currentStock < amount) {
+                    alert("❌ Insufficient Stock! Current Stock: " + inkData.currentStock.toFixed(2) + " Qty.");
+                    return;
+                }
+                newStockLevel -= amount;
+            }
+            
+            if (newStockLevel < inkData.minLevel) {
+                alert(`⚠️ LOW STOCK WARNING! ${inkName} is now at ${newStockLevel.toFixed(2)} Qty (Min: ${inkData.minLevel}). Please reorder.`);
+            }
+
+            inkData.currentStock = newStockLevel;
+
+            STOCK_REF.child(inkKey).set(inkData)
+                .then(() => {
+                    const newLog = {
+                        date: date,
+                        ink: inkName,
+                        printer: printerName,
+                        type: type === 'ADD' ? 'ADD' : 'USE',
+                        amount: amount,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    };
+
+                    HISTORY_REF.push(newLog)
+                        .then(() => {
+                            document.getElementById('movementAmount').value = '';
+                            document.getElementById('printerSelect').value = '';
+                            updateMovementButtons();
+                        })
+                        .catch(error => console.error("History Push Error:", error));
+                })
+                .catch(error => console.error("Stock Update Error:", error));
+        });
+    }
+
+    function addStock() {
+        handleMovement('ADD');
+    }
+
+    function useStock() {
+        handleMovement('USE');
+    }
+
+    // --- Utility Export Functions ---
+    function generateCSV(data, filename) {
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Date,Ink Type,Printer/Stock Location,Operation,Amount (Qty)\n";
+
+        data.forEach(log => {
+            const operation = log.type === 'ADD' ? 'Stock Added' : 'Stock Used';
+            const amount = (log.type === 'ADD' ? '+' : '-') + (Math.round(log.amount * 100) / 100);
+            const printer = log.printer || 'N/A';
+
+            const row = [`"${log.date}"`, `"${log.ink}"`, `"${printer}"`, `"${operation}"`, amount];
+            csvContent += row.join(",") + "\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function exportCurrentHistory() {
+        HISTORY_REF.once('value', (snapshot) => {
+            const historyObj = snapshot.val();
+            if (!historyObj) {
+                alert("No transactions found to export.");
+                return;
+            }
+
+            const historyLog = Object.values(historyObj);
+            const today = new Date().toISOString().substring(0, 10);
+            generateCSV(historyLog, `Ink_Log_Full_${today}.csv`);
+        });
+    }
+
+    function exportCSV() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        if (!startDate || !endDate) {
+            alert("Please select both a Start Date and End Date for the report.");
+            return;
+        }
+
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+
+        if (start > end) {
+            alert("Start Date cannot be after End Date.");
+            return;
+        }
+
+        HISTORY_REF.once('value', (snapshot) => {
+            const historyObj = snapshot.val();
+            if (!historyObj) {
+                alert("No transactions found.");
+                return;
+            }
+
+            const historyLog = Object.values(historyObj);
+
+            const filteredData = historyLog.filter(log => {
+                const logDate = new Date(log.date);
+                return logDate >= start && logDate <= end;
+            });
+
+            if (filteredData.length === 0) {
+                alert("No transactions found within the selected date range.");
+                return;
+            }
+
+            generateCSV(filteredData, `Ink_Stock_Report_${startDate}_to_${endDate}.csv`);
+        });
+    }
+
+    // --- Initialization ---
+    function initialize() {
+        const today = new Date().toISOString().substring(0, 10);
+        document.getElementById('movementDate').value = today;
+        document.getElementById('startDate').value = today;
+        document.getElementById('endDate').value = today;
+
+        loadAndListenToStock();
+        loadAndListenToHistory();
+        updateMovementButtons();
+    }
+
+    document.addEventListener('DOMContentLoaded', initialize);
+</script>
+
+</body>
+</html>
