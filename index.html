@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ink Stock Management System | Professional V9 - Responsive</title>
+    <title>Ink Stock Management System | Responsive & Firebase Connected</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         :root {
             --primary-color: #1a73e8; /* Google Blue */
@@ -52,7 +53,7 @@
             border: 1px solid #e8e8e8;
         }
         
-        /* 🔥 NEW: CSS GRID LAYOUT for Top Row (Responsive by default) 🔥 */
+        /* CSS GRID LAYOUT for Top Row (Responsive by default) */
         .top-row {
             display: grid;
             grid-template-columns: 2fr 1fr; /* 2/3 for Stock, 1/3 for Movement */
@@ -60,9 +61,8 @@
         }
         
         .full-width {
-            grid-column: 1 / -1; /* Sections like History take full width */
+            grid-column: 1 / -1; /* Full width for History/Report sections */
         }
-        /* End of NEW CSS GRID */
 
         h2 {
             color: var(--primary-color);
@@ -103,7 +103,7 @@
             font-weight: 500;
         }
         
-        /* 🔥 NEW: Scrollable History Table Container 🔥 */
+        /* Scrollable History Table Container */
         .history-table-container {
             max-height: 400px; /* Set a maximum height */
             overflow-y: auto; /* Enable vertical scroll */
@@ -115,7 +115,7 @@
             z-index: 10;
         }
 
-        /* --- Input and Form Styling (Unchanged for Functionality) --- */
+        /* --- Input and Form Styling --- */
         .form-group {
             margin-bottom: 15px;
         }
@@ -133,11 +133,6 @@
             box-sizing: border-box;
             transition: border-color 0.2s;
         }
-        input:focus, select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
-            outline: none;
-        }
         
         .min-input {
             width: 80px;
@@ -145,7 +140,7 @@
             text-align: center;
         }
 
-        /* --- Button Styling (Unchanged) --- */
+        /* --- Button Styling --- */
         .action-btn {
             padding: 10px 20px;
             border: none;
@@ -158,21 +153,17 @@
             align-items: center;
             gap: 8px;
         }
-        .action-btn:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .add-btn { background-color: var(--success-color); color: white; }
-        .use-btn { background-color: var(--danger-color); color: white; }
-        .save-btn { background-color: var(--warning-color); color: var(--text-dark); margin-top: 15px; }
-        .export-btn { background-color: var(--primary-color); color: white; }
-        .clear-btn { background-color: #6c757d; color: white; margin-left: 10px; }
-        
         .movement-buttons {
             display: flex;
             gap: 10px;
             margin-top: 15px;
         }
+        
+        .add-btn { background-color: var(--success-color); color: white; }
+        .use-btn { background-color: var(--danger-color); color: white; }
+        .save-btn { background-color: var(--warning-color); color: var(--text-dark); margin-top: 15px; }
+        .export-btn { background-color: var(--primary-color); color: white; }
+        .clear-btn { background-color: #6c757d; color: white; margin-left: 10px; }
         
         .report-controls {
             display: flex;
@@ -211,7 +202,7 @@
             display: none;
         }
 
-        /* 🔥 NEW: MEDIA QUERY for Mobile Responsiveness 🔥 */
+        /* MEDIA QUERY for Mobile Responsiveness */
         @media (max-width: 900px) {
             .top-row {
                 grid-template-columns: 1fr; /* Single column layout on small screens */
@@ -219,15 +210,9 @@
             .section-card {
                 padding: 20px;
             }
-            h1 {
-                font-size: 2em;
-            }
             .report-controls {
                 flex-direction: column;
                 align-items: stretch;
-            }
-            .report-controls .form-group {
-                width: 100%;
             }
         }
     </style>
@@ -237,7 +222,7 @@
 <div class="container">
     <h1><i class="fas fa-print"></i> Ink Stock Management System</h1>
     <p class="alert-info section-card" style="font-weight: 500; margin-bottom: 0; padding: 15px; background-color: #e3f2fd; border: 1px solid #bbdefb; color: #0d47a1;">
-        **Status:** Real-time data connected to Firebase. All changes are saved instantly.
+        **Status:** Real-time data connected to Firebase. Check if initial data (C/M/Y/K) is visible below.
     </p>
 
     <div class="top-row">
@@ -359,14 +344,14 @@
     // ----------------------------------------------------------------------
     const firebaseConfig = {
         // Your provided details are inserted here:
-        apiKey: "AIzaSyCjCLZwaLdJ6FanrtiS3RX19vUC5RRUbRE",
-        authDomain: "ink-stock.firebaseapp.com",
-        databaseURL: "https://ink-stock-default-rtdb.firebaseio.com", // Manually added default DB URL format
-        projectId: "ink-stock",
-        storageBucket: "ink-stock.firebasestorage.app",
-        messagingSenderId: "918215954320",
-        appId: "1:918215954320:web:08b4d194528f172ece6d15",
-        measurementId: "G-J7ZKB1W0G8"
+        apiKey: "AIzaSyAQnnfMvavwDx9yF254khrW2gOFvDtlHJk",
+        authDomain: "ink-stock-data.firebaseapp.com",
+        databaseURL: "https://ink-stock-data-default-rtdb.firebaseio.com",
+        projectId: "ink-stock-data",
+        storageBucket: "ink-stock-data.firebasestorage.app",
+        messagingSenderId: "924176091088",
+        appId: "1:924176091088:web:1a3d130225ca7b288cdbd5",
+        measurementId: "G-KHG7PRDXT5"
     };
 
     // Initialize Firebase and Database References
@@ -388,8 +373,10 @@
         STOCK_REF.on('value', (snapshot) => {
             let inkData;
             if (snapshot.exists()) {
+                // Firebase-ல் இருந்து data-வை எடுத்து array-ஆக மாற்றுகிறது
                 inkData = Object.values(snapshot.val());
             } else {
+                // Database-ல் data இல்லை என்றால், INITIAL_INKS-ஐப் பயன்படுத்தி ஒரு முறை சேமிக்கிறது
                 inkData = INITIAL_INKS;
                 STOCK_REF.once('value', (s) => {
                     if (!s.exists()) {
@@ -400,7 +387,6 @@
             renderStockTable(inkData);
         }, (error) => {
             console.error("Firebase Stock Load Error:", error);
-            // alert("Failed to load stock data from Firebase. Check your connection/rules."); // Removed alert for smoother UI load
         });
     }
 
@@ -432,6 +418,7 @@
             if (historyObj) {
                 history = Object.values(historyObj);
             }
+            // புதிய பதிவுகள் மேலே வருமாறு தலைகீழாக மாற்றுகிறது
             renderHistoryTable(history.slice().reverse());
         }, (error) => {
             console.error("Firebase History Load Error:", error);
