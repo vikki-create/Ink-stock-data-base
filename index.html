@@ -3,177 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ink Stock Management System | History Toggle Feature - Fixed UI</title>
+    <title>Ink Stock Management System | WhatsApp Stock Update</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         :root {
-            --primary-color: #1a73e8; /* Google Blue */
-            --danger-color: #ea4335; /* Google Red */
-            --success-color: #34a853; /* Google Green */
-            --warning-color: #fbbc05; /* Google Yellow */
+            --primary-color: #1a73e8;
+            --danger-color: #ea4335;
+            --success-color: #34a853;
+            --warning-color: #fbbc05;
+            --whatsapp-color: #25D366; /* WhatsApp Green */
             --bg-light: #f4f6f9;
             --card-bg: white;
             --text-dark: #3c4043;
             --text-light: #5f6368;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
+        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; }
 
-        /* ---------------------------------------------------- */
-        /* UI & LAYOUT STYLES */
-        /* ---------------------------------------------------- */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .section-card {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e8e8e8;
-        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; gap: 25px; }
+        .section-card { background-color: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); border: 1px solid #e8e8e8; }
         
-        /* Summary Dashboard Grid */
-        .summary-dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
+        /* Dashboard */
+        .summary-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .summary-card { background-color: var(--card-bg); padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); border-left: 5px solid var(--primary-color); }
+        .summary-card h3 { margin-top: 0; font-size: 1em; color: var(--text-light); font-weight: 500; }
+        .summary-card .value { font-size: 2em; font-weight: 700; color: var(--text-dark); }
 
-        .summary-card {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-            border-left: 5px solid var(--primary-color);
-        }
-
-        .summary-card h3 {
-            margin-top: 0;
-            font-size: 1em;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        .summary-card .value {
-            font-size: 2em;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        .top-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 25px;
-        }
+        .top-row { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+        .full-width { grid-column: 1 / -1; }
         
-        .full-width {
-            grid-column: 1 / -1;
-        }
-        
-        /* Table Styling */
+        /* Table */
         table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 10px; }
         th, td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; text-align: left; font-size: 0.95em; }
         th { background-color: var(--primary-color); color: white; text-transform: uppercase; font-weight: 500; position: sticky; top: 0; }
         .low-stock { background-color: #fff5f5 !important; color: var(--danger-color); font-weight: 500; }
-        .history-table-container { 
-            max-height: 400px; 
-            overflow-y: auto; 
-            border: 1px solid #e8e8e8; 
-            border-radius: 8px;
-        }
+        .history-table-container { max-height: 400px; overflow-y: auto; border: 1px solid #e8e8e8; border-radius: 8px; }
 
-        /* Form/Input Styling */
+        /* Forms */
         .form-group { margin-bottom: 15px; }
         input[type="number"], input[type="date"], select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
         .min-input { width: 80px; padding: 8px; text-align: center; }
 
-        /* Button Styling */
-        .action-btn { 
-            padding: 10px 15px; /* Reduced padding for smaller buttons */
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            font-size: 0.9em; /* Slightly smaller font */
-            transition: background-color 0.2s, box-shadow 0.2s; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            white-space: nowrap; /* Prevents button text wrapping */
-        }
+        /* Buttons */
+        .action-btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: background-color 0.2s; display: flex; align-items: center; gap: 8px; white-space: nowrap; color: white; }
         .movement-buttons { display: flex; gap: 10px; margin-top: 15px; }
-        .add-btn { background-color: var(--success-color); color: white; }
-        .use-btn { background-color: var(--danger-color); color: white; }
-        .save-btn { background-color: var(--warning-color); color: var(--text-dark); margin-top: 15px; }
-        .export-btn { background-color: var(--primary-color); color: white; }
-        .clear-btn { background-color: #6c757d; color: white; margin-left: 10px; }
         
-        /* FIX: Ensure buttons are in a single horizontal line */
-        .history-header-controls { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 15px; 
-            flex-wrap: wrap; /* Allows wrapping on very small screens */
-            gap: 15px;
-        }
+        .add-btn { background-color: var(--success-color); }
+        .use-btn { background-color: var(--danger-color); }
+        .save-btn { background-color: var(--warning-color); color: var(--text-dark); }
+        .export-btn { background-color: var(--primary-color); }
+        .clear-btn { background-color: #6c757d; margin-left: 10px; }
+        
+        /* WHATSAPP BUTTON STYLES */
+        .whatsapp-btn { background-color: var(--whatsapp-color); }
+        .email-btn { background-color: #607d8b; }
+        
+        .whatsapp-btn:hover { background-color: #128C7E; }
+        .email-btn:hover { background-color: #455a64; }
 
-        /* FIX: New class for button grouping to ensure horizontal layout */
-        .button-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap; /* Important for responsiveness */
-        }
+        .history-header-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 15px; }
+        .button-group { display: flex; gap: 10px; flex-wrap: wrap; }
 
-        /* Notification Badge */
+        /* Badge */
         .notification-badge { position: absolute; top: -10px; right: -10px; padding: 5px 10px; border-radius: 50%; background-color: var(--danger-color); color: white; font-size: 0.7em; font-weight: 700; text-align: center; box-shadow: 0 0 0 2px white; display: none; }
+        .badge-container { position: relative; display: inline-block; }
 
-        /* Hide History Table by default */
-        #historyTableSection {
-            display: none;
-            margin-top: 15px;
-        }
+        #historyTableSection { display: none; margin-top: 15px; }
 
-        /* Responsive Design */
         @media (max-width: 900px) {
             .top-row { grid-template-columns: 1fr; }
-            .section-card { padding: 20px; }
-            /* Stack controls vertically on mobile if they don't fit */
-            .history-header-controls, .button-group {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .action-btn { 
-                margin: 5px 0; /* Add vertical margin when stacked */
-                justify-content: center;
-            }
+            .history-header-controls, .button-group { flex-direction: column; align-items: stretch; }
+            .action-btn { margin: 5px 0; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1><i class="fas fa-print"></i> Real-Time Ink Stock Management</h1>
-    <p class="alert-info section-card" style="font-weight: 500; margin-bottom: 0; padding: 15px; background-color: #e3f2fd; border: 1px solid #bbdefb; color: #0d47a1;">
-        **Current Status:** All core functions (Stock, Movement, History) are connected to Firebase. **Please ensure Firebase Security Rules are updated.**
-    </p>
-
-    <!-- SECTION A: Summary Dashboard -->
+    <h1><i class="fas fa-print"></i> Ink Stock Management</h1>
+    
     <div class="summary-dashboard" id="summaryDashboard">
         <div class="summary-card" style="border-left-color: var(--primary-color);">
             <h3>Total Ink Stock (Qty)</h3>
@@ -184,26 +93,30 @@
             <div class="value" id="lowStockItems">0</div>
         </div>
         <div class="summary-card" style="border-left-color: var(--success-color);">
-            <h3>Total Transactions Logged</h3>
+            <h3>Transactions Logged</h3>
             <div class="value" id="totalTransactions">0</div>
         </div>
         <div class="summary-card" style="border-left-color: var(--warning-color);">
-            <h3>Last Data Sync</h3>
+            <h3>Last Sync</h3>
             <div class="value" id="lastUpdateTime">N/A</div>
         </div>
     </div>
-    <!-- END NEW SECTION -->
 
-    <!-- SECTION B: STOCK TABLE AND MOVEMENT FORM (Grid Layout) -->
     <div class="top-row">
-
-        <!-- 1. Current Stock Status Table -->
         <div class="section-card stock-section">
             <div class="history-header-controls">
-                <h2>1. Current Stock & Alerts</h2>
-                <div id="lowStockNotification">
-                    <button class="action-btn save-btn" onclick="saveStock()">💾 Save Minimum Levels</button>
-                    <span id="badgeCount" class="notification-badge">0</span>
+                <h2>1. Current Stock</h2>
+                <div class="button-group">
+                    <button class="action-btn whatsapp-btn" onclick="shareCurrentStockWhatsApp()">
+                        <i class="fab fa-whatsapp"></i> Share Stock
+                    </button>
+                    <button class="action-btn email-btn" onclick="sendLowStockEmail()">
+                        <i class="fas fa-envelope"></i> Email Alert
+                    </button>
+                    <div class="badge-container">
+                        <button class="action-btn save-btn" onclick="saveStock()">💾 Save Levels</button>
+                        <span id="badgeCount" class="notification-badge">0</span>
+                    </div>
                 </div>
             </div>
             
@@ -212,123 +125,94 @@
                     <tr>
                         <th>Ink Type</th>
                         <th>Stock (Qty)</th>
-                        <th>Min Alert (Qty)</th>
+                        <th>Min Alert</th>
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="stockTableBody">
-                    <!-- Data will be inserted here by JavaScript -->
-                </tbody>
+                <tbody id="stockTableBody"></tbody>
             </table>
         </div>
 
-        <!-- 2. Record Stock Movement Form -->
         <div class="section-card movement-section">
-            <h2>2. Record Stock Movement</h2>
+            <h2>2. Record Movement</h2>
             <div class="movement-controls">
-                
                 <div class="form-group">
-                    <label for="inkSelect">Ink Type</label>
-                    <select id="inkSelect" required>
-                        <!-- Options will be inserted here by JavaScript -->
-                    </select>
+                    <label>Ink Type</label>
+                    <select id="inkSelect" required></select>
                 </div>
-
                 <div class="form-group">
-                    <label for="printerSelect">Printer / Location</label>
+                    <label>Location</label>
                     <select id="printerSelect" onchange="updateMovementButtons()" required>
-                        <option value="">-- Select Printer/Location --</option>
+                        <option value="">-- Select --</option>
                         <option value="Printer 1">Printer 1</option>
                         <option value="Printer 2">Printer 2</option>
-                        <option value="General Stock">General Stock (Stock In/Out)</option>
+                        <option value="General Stock">General Stock</option>
                     </select>
                 </div>
-
                 <div class="form-group">
-                    <label for="movementAmount">Amount (Qty)</label>
-                    <input type="number" id="movementAmount" min="0" placeholder="Enter amount..." required>
+                    <label>Amount (Qty)</label>
+                    <input type="number" id="movementAmount" min="0" placeholder="0.00" required>
                 </div>
-
                 <div class="form-group">
-                    <label for="movementDate">Date</label>
+                    <label>Date</label>
                     <input type="date" id="movementDate" required>
                 </div>
-
                 <div class="movement-buttons">
-                    <button class="action-btn add-btn" id="addBtn" onclick="addStock()">➕ Stock In</button>
-                    <button class="action-btn use-btn" id="useBtn" onclick="useStock()">➖ Ink Used</button>
+                    <button class="action-btn add-btn" id="addBtn" onclick="addStock()">➕ In</button>
+                    <button class="action-btn use-btn" id="useBtn" onclick="useStock()">➖ Used</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SECTION C: HISTORY LOG (Full Width) -->
     <div class="section-card full-width">
         <div class="history-header-controls">
-            <h2>3. Transaction History Log</h2>
+            <h2>3. Transaction History</h2>
             <div class="button-group">
-                <!-- Buttons are grouped together now -->
                 <button class="action-btn export-btn" id="toggleHistoryBtn" onclick="toggleHistoryVisibility()">
                     <i class="fas fa-eye-slash"></i> Show History
                 </button>
-                <button class="action-btn export-btn" onclick="exportCurrentHistory()">⬇️ Export Full Log</button>
-                <button class="action-btn clear-btn" onclick="clearHistory()">🧹 Clear History</button>
+                <button class="action-btn export-btn" onclick="exportCurrentHistory()">⬇️ Export Log</button>
+                <button class="action-btn clear-btn" onclick="clearHistory()">🧹 Clear</button>
             </div>
         </div>
-        
-        <!-- ID: historyTableSection controls visibility -->
         <div id="historyTableSection">
             <div class="history-table-container">
                 <table class="history-table">
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Ink</th>
-                            <th>Printer/Location</th>
-                            <th>Operation</th>
-                            <th>Amount (Qty)</th>
+                            <th>Date</th><th>Ink</th><th>Location</th><th>Operation</th><th>Amount</th>
                         </tr>
                     </thead>
-                    <tbody id="historyTableBody">
-                        <!-- Data will be inserted here by JavaScript -->
-                    </tbody>
+                    <tbody id="historyTableBody"></tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- SECTION D: DATE RANGE REPORT (Full Width) -->
     <div class="section-card full-width">
-        <h2>4. Date Range Report Export</h2>
+        <h2>4. Export CSV Report</h2>
         <div class="report-controls">
-            <div class="form-group">
-                <label for="startDate">From Date:</label>
-                <input type="date" id="startDate" required>
+            <div class="button-group" style="align-items: flex-end;">
+                <div class="form-group" style="margin-bottom:0; flex:1;">
+                    <label>From Date:</label>
+                    <input type="date" id="startDate" required>
+                </div>
+                <div class="form-group" style="margin-bottom:0; flex:1;">
+                    <label>To Date:</label>
+                    <input type="date" id="endDate" required>
+                </div>
+                <button class="action-btn export-btn" onclick="exportCSV()">⬇️ Download CSV</button>
             </div>
-
-            <div class="form-group">
-                <label for="endDate">To Date:</label>
-                <input type="date" id="endDate" required>
-            </div>
-
-            <button class="action-btn export-btn" onclick="exportCSV()">⬇️ Download Report</button>
         </div>
-        <p style="margin-top: 15px; color: var(--text-light); font-size: 0.9em;">
-            Select a specific date range to generate and download a CSV report of all movements.
-        </p>
     </div>
 </div>
 
-<!-- ---------------------------------------------------- -->
-<!-- FIREBASE SDK & JAVASCRIPT LOGIC -->
-<!-- ---------------------------------------------------- -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script> 
 
 <script>
-    // ----------------------------------------------------------------------
-    // 1. 🔥 FIREBASE CONFIGURATION & INITIALIZATION 🔥
-    // ----------------------------------------------------------------------
+    // --- 1. CONFIG ---
     const firebaseConfig = {
         apiKey: "AIzaSyAQnnfMvavwDx9yF254khrW2gOFvDtlHJk",
         authDomain: "ink-stock-data.firebaseapp.com",
@@ -339,10 +223,8 @@
         appId: "1:924176091088:web:1a3d130225ca7b288cdbd5",
         measurementId: "G-KHG7PRDXT5"
     };
-
     const app = firebase.initializeApp(firebaseConfig);
     const database = app.database();
-    
     const STOCK_REF = database.ref('stock');
     const HISTORY_REF = database.ref('history');
     
@@ -352,386 +234,226 @@
         { name: "Yellow", currentStock: 0, minLevel: 10 },
         { name: "Black", currentStock: 0, minLevel: 10 },
     ];
-
     let totalTransactionCount = 0;
+    let globalStockData = []; 
 
-    // ----------------------------------------------------------------------
-    // 2. 👁️ HISTORY TOGGLE FUNCTION
-    // ----------------------------------------------------------------------
-
-    function toggleHistoryVisibility() {
-        const historySection = document.getElementById('historyTableSection');
-        const toggleBtn = document.getElementById('toggleHistoryBtn');
-        const isHidden = historySection.style.display === 'none' || historySection.style.display === '';
-
-        if (isHidden) {
-            historySection.style.display = 'block';
-            toggleBtn.innerHTML = '<i class="fas fa-eye"></i> Hide History';
-        } else {
-            historySection.style.display = 'none';
-            toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Show History';
-        }
-    }
-
-
-    // ----------------------------------------------------------------------
-    // 3. 💾 DATA LOAD & SAVE FUNCTIONS
-    // ----------------------------------------------------------------------
-    
+    // --- 2. DATA LOAD ---
     function loadAndListenToStock() {
         STOCK_REF.on('value', (snapshot) => {
-            let inkData;
-            if (snapshot.exists()) {
-                inkData = Object.values(snapshot.val());
-                document.getElementById('lastUpdateTime').textContent = new Date().toLocaleTimeString();
-            } else {
-                inkData = INITIAL_INKS;
-                STOCK_REF.once('value', (s) => {
-                    if (!s.exists()) { saveStock(inkData); }
-                });
-            }
+            let inkData = snapshot.exists() ? Object.values(snapshot.val()) : INITIAL_INKS;
+            if (!snapshot.exists()) { STOCK_REF.once('value', s => { if (!s.exists()) saveStock(inkData); }); }
+            
+            globalStockData = inkData; 
+            document.getElementById('lastUpdateTime').textContent = new Date().toLocaleTimeString();
             renderStockTable(inkData);
             updateSummaryDashboard(inkData, totalTransactionCount); 
-        }, (error) => {
-            console.error("Firebase Stock Load Error:", error);
         });
-    }
-
-    function saveStock(dataToSave = null) {
-        const currentStockData = dataToSave || getStockDataFromTable();
-        const firebaseObject = currentStockData.reduce((obj, ink) => {
-            obj[ink.name] = ink;
-            return obj;
-        }, {});
-
-        STOCK_REF.set(firebaseObject)
-            .then(() => {
-                if (!dataToSave) { alert("Minimum Stock Levels saved successfully!"); }
-            })
-            .catch(error => { console.error("Firebase Save Error:", error); });
     }
 
     function loadAndListenToHistory() {
         HISTORY_REF.on('value', (snapshot) => {
-            const historyObj = snapshot.val();
-            let history = [];
-
-            if (historyObj) {
-                history = Object.values(historyObj);
-                totalTransactionCount = history.length;
-            } else {
-                totalTransactionCount = 0;
-            }
+            const history = snapshot.val() ? Object.values(snapshot.val()) : [];
+            totalTransactionCount = history.length;
             renderHistoryTable(history.slice().reverse());
-            
-            STOCK_REF.once('value', (s) => {
-                if(s.exists()) {
-                    updateSummaryDashboard(Object.values(s.val()), totalTransactionCount);
-                }
-            });
-
-        }, (error) => {
-            console.error("Firebase History Load Error:", error);
+            STOCK_REF.once('value', s => { if(s.exists()) updateSummaryDashboard(Object.values(s.val()), totalTransactionCount); });
         });
     }
 
-    function clearHistory() {
-        if (confirm("⚠️ WARNING: This will permanently delete ALL recorded ink movements! Are you sure you want to proceed?")) {
-            HISTORY_REF.set(null)
-                .then(() => { alert("Ink history successfully cleared."); })
-                .catch(error => { console.error("Firebase Clear Error:", error); });
+    // --- 3. WHATSAPP & EMAIL (AESTHETIC & LOGIC FIX) ---
+    
+    // UPDATED FUNCTION: Send CURRENT Stock via WhatsApp with improved formatting and corrected logic
+    function shareCurrentStockWhatsApp() {
+        if (!globalStockData || globalStockData.length === 0) {
+            alert("No stock data available to share.");
+            return;
         }
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        // 1. Header - Cleaned up to use simple symbols and strong bolding
+        let message = `*INK STOCK REPORT*\n`;
+        message += `_Date:_ ${dateStr} ${timeStr}\n`;
+        message += `---------------------\n\n`;
+
+        // 2. Loop through Inks
+        let lowCount = 0;
+        let listMessage = '';
+        globalStockData.forEach(ink => {
+            const qty = parseFloat(ink.currentStock).toFixed(2);
+            let statusText;
+            
+            if (ink.currentStock < ink.minLevel) {
+                statusText = '*🚨 LOW STOCK*'; // Bolding for emphasis on LOW
+                lowCount++;
+            } else {
+                statusText = 'OK'; // Simple text for OK
+            }
+
+            // Using simple dash/hyphen for list item
+            listMessage += `- *${ink.name}:* ${qty} Qty (${statusText})\n`;
+        });
+        
+        message += listMessage;
+        
+        // 3. Footer / Summary
+        message += `\n---------------------\n`;
+        if (lowCount > 0) {
+            // Emphasize action required
+            message += `*🚨 ACTION NEEDED:* ${lowCount} item(s) are below the minimum level.`;
+        } else {
+            message += `_Status:_ All items are sufficiently stocked.`;
+        }
+
+        // 4. Open WhatsApp
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
     }
 
+    function sendLowStockEmail() {
+        const lowItems = globalStockData.filter(ink => ink.currentStock < ink.minLevel);
+        if (lowItems.length === 0) { alert("No items are currently below minimum levels."); return; }
+        
+        let body = "URGENT: Low Ink Stock Alert\n\nPlease restock:\n\n";
+        lowItems.forEach(item => { body += `- ${item.name}: ${item.currentStock} (Min: ${item.minLevel})\n`; });
+        window.location.href = `mailto:?subject=Low Ink Stock Alert&body=${encodeURIComponent(body)}`;
+    }
 
-    // ----------------------------------------------------------------------
-    // 4. 🎨 RENDERING FUNCTIONS (UI Updates)
-    // ----------------------------------------------------------------------
+    // --- 4. CORE FUNCTIONS (Save, Render, etc.) ---
+    function saveStock(data = null) {
+        const currentData = data || getStockDataFromTable();
+        const firebaseObject = currentData.reduce((obj, ink) => { obj[ink.name] = ink; return obj; }, {});
+        STOCK_REF.set(firebaseObject).then(() => { if (!data) alert("Settings saved!"); });
+    }
 
-    function updateSummaryDashboard(inkData, transactionCount) {
-        let totalStock = inkData.reduce((sum, ink) => sum + parseFloat(ink.currentStock), 0);
-        let lowStockCount = inkData.filter(ink => ink.currentStock < ink.minLevel).length;
-
-        document.getElementById('totalStockValue').textContent = totalStock.toFixed(2);
-        document.getElementById('lowStockItems').textContent = lowStockCount;
-        document.getElementById('totalTransactions').textContent = transactionCount;
+    function updateSummaryDashboard(inkData, tCount) {
+        let total = inkData.reduce((sum, ink) => sum + parseFloat(ink.currentStock), 0);
+        let low = inkData.filter(ink => ink.currentStock < ink.minLevel).length;
+        document.getElementById('totalStockValue').textContent = total.toFixed(2);
+        document.getElementById('lowStockItems').textContent = low;
+        document.getElementById('totalTransactions').textContent = tCount;
     }
 
     function renderStockTable(inkData) {
-        const tableBody = document.getElementById('stockTableBody');
-        tableBody.innerHTML = '';
-        const inkSelect = document.getElementById('inkSelect');
-        inkSelect.innerHTML = '<option value="">-- Select Ink Type --</option>';
-        
-        let lowStockCount = 0;
+        const tbody = document.getElementById('stockTableBody');
+        const select = document.getElementById('inkSelect');
+        tbody.innerHTML = ''; select.innerHTML = '<option value="">-- Select --</option>';
+        let lowCount = 0;
 
         inkData.forEach(ink => {
-            const isLowStock = ink.currentStock < ink.minLevel;
-            if (isLowStock) { lowStockCount++; }
-            
-            const row = tableBody.insertRow();
-            row.className = isLowStock ? 'low-stock' : '';
-
-            row.insertCell().textContent = ink.name;
-            row.insertCell().textContent = parseFloat(ink.currentStock).toFixed(2);
-
-            const minCell = row.insertCell();
-            const minInput = document.createElement('input');
-            minInput.type = 'number';
-            minInput.min = '0';
-            minInput.value = ink.minLevel;
-            minInput.className = 'min-input';
-            minCell.appendChild(minInput);
-
-            const statusCell = row.insertCell();
-            statusCell.textContent = isLowStock ? "💥 LOW STOCK" : "✅ OK";
-            statusCell.style.color = isLowStock ? 'var(--danger-color)' : 'var(--success-color)';
-            statusCell.style.fontWeight = 'bold';
-
-            const option = document.createElement('option');
-            option.value = ink.name;
-            option.textContent = ink.name;
-            inkSelect.appendChild(option);
+            const isLow = ink.currentStock < ink.minLevel;
+            if (isLow) lowCount++;
+            const row = tbody.insertRow();
+            row.className = isLow ? 'low-stock' : '';
+            row.innerHTML = `
+                <td>${ink.name}</td>
+                <td>${parseFloat(ink.currentStock).toFixed(2)}</td>
+                <td><input type="number" class="min-input" value="${ink.minLevel}" min="0"></td>
+                <td style="font-weight:bold; color:${isLow?'var(--danger-color)':'var(--success-color)'}">
+                    ${isLow ? "💥 LOW" : "✅ OK"}
+                </td>
+            `;
+            let opt = document.createElement('option'); opt.value = ink.name; opt.textContent = ink.name;
+            select.appendChild(opt);
         });
-        
-        updateLowStockBadge(lowStockCount);
+        document.getElementById('badgeCount').style.display = lowCount > 0 ? 'block' : 'none';
+        document.getElementById('badgeCount').textContent = lowCount;
     }
 
-    function updateLowStockBadge(count) {
-        const badge = document.getElementById('badgeCount');
-        if (count > 0) {
-            badge.textContent = count;
-            badge.style.display = 'block';
-        } else {
-            badge.style.display = 'none';
-        }
-    }
-
-    function renderHistoryTable(historyData) {
-        const tableBody = document.getElementById('historyTableBody');
-        tableBody.innerHTML = '';
-
-        historyData.forEach(log => {
-            const row = tableBody.insertRow();
-            row.insertCell().textContent = log.date;
-            row.insertCell().textContent = log.ink;
-            row.insertCell().textContent = log.printer || 'N/A';
-            
-            const operationCell = row.insertCell();
-            const operationText = log.type === 'ADD' ? 'Stock Added' : 'Stock Used';
-            operationCell.textContent = operationText;
-            
-            const amountCell = row.insertCell();
-            const displayAmount = Math.round(log.amount * 100) / 100;
-            amountCell.textContent = (log.type === 'ADD' ? '+' : '-') + displayAmount;
-            amountCell.style.color = log.type === 'ADD' ? 'var(--success-color)' : 'var(--danger-color)';
-            amountCell.style.fontWeight = '500';
+    function renderHistoryTable(data) {
+        const tbody = document.getElementById('historyTableBody'); tbody.innerHTML = '';
+        data.forEach(log => {
+            const row = tbody.insertRow();
+            const sign = log.type === 'ADD' ? '+' : '-';
+            const color = log.type === 'ADD' ? 'var(--success-color)' : 'var(--danger-color)';
+            row.innerHTML = `<td>${log.date}</td><td>${log.ink}</td><td>${log.printer||'-'}</td><td>${log.type==='ADD'?'Added':'Used'}</td><td style="color:${color};font-weight:500">${sign}${parseFloat(log.amount).toFixed(2)}</td>`;
         });
-    }
-
-    // ----------------------------------------------------------------------
-    // 5. 🛒 STOCK MOVEMENT FUNCTIONS
-    // ----------------------------------------------------------------------
-
-    function updateMovementButtons() {
-        const printerSelect = document.getElementById('printerSelect').value;
-        const addBtn = document.getElementById('addBtn');
-        const useBtn = document.getElementById('useBtn');
-
-        addBtn.style.display = 'none';
-        useBtn.style.display = 'none';
-        
-        if (printerSelect === 'General Stock') {
-            addBtn.style.display = 'flex';
-            useBtn.style.display = 'flex';
-        } else if (printerSelect === 'Printer 1' || printerSelect === 'Printer 2') {
-            useBtn.style.display = 'flex';
-        }
     }
 
     function getStockDataFromTable() {
-        const rows = document.querySelectorAll('#stockTableBody tr');
-        return Array.from(rows).map(row => {
-            return {
-                name: row.cells[0].textContent,
-                currentStock: parseFloat(row.cells[1].textContent) || 0,
-                minLevel: parseFloat(row.querySelector('.min-input').value) || 0
-            };
+        return Array.from(document.querySelectorAll('#stockTableBody tr')).map(row => ({
+            name: row.cells[0].textContent,
+            currentStock: parseFloat(row.cells[1].textContent)||0,
+            minLevel: parseFloat(row.querySelector('.min-input').value)||0
+        }));
+    }
+
+    function updateMovementButtons() {
+        const val = document.getElementById('printerSelect').value;
+        document.getElementById('addBtn').style.display = val === 'General Stock' ? 'flex' : 'none';
+        document.getElementById('useBtn').style.display = val ? 'flex' : 'none';
+    }
+
+    function handleMovement(type) {
+        const ink = document.getElementById('inkSelect').value;
+        const ptr = document.getElementById('printerSelect').value;
+        const amt = parseFloat(document.getElementById('movementAmount').value);
+        const date = document.getElementById('movementDate').value;
+        
+        if (!ink || !amt || amt<=0 || !date || !ptr) { alert("Please fill all fields."); return; }
+        
+        STOCK_REF.once('value', snap => {
+            if (!snap.exists()) return;
+            let data = snap.val(), inkData = data[ink];
+            if (!inkData) return;
+
+            let newStock = type === 'ADD' ? inkData.currentStock + amt : inkData.currentStock - amt;
+            if (type === 'USE' && newStock < 0) { alert("Insufficient Stock!"); return; }
+            if (newStock < inkData.minLevel) alert(`⚠️ Warning: ${ink} is now LOW (${newStock})`);
+            
+            inkData.currentStock = newStock;
+            STOCK_REF.child(ink).set(inkData).then(() => {
+                HISTORY_REF.push({ date: date, ink: ink, printer: ptr, type: type, amount: amt, timestamp: firebase.database.ServerValue.TIMESTAMP });
+                document.getElementById('movementAmount').value = '';
+                document.getElementById('printerSelect').value = '';
+                updateMovementButtons();
+            });
         });
     }
     
-    function handleMovement(type) {
-        const inkName = document.getElementById('inkSelect').value;
-        const printerName = document.getElementById('printerSelect').value;
-        const amount = parseFloat(document.getElementById('movementAmount').value);
-        const date = document.getElementById('movementDate').value;
-
-        if (!inkName || !amount || amount <= 0 || !date || !printerName) {
-            alert("Please fill in Ink Type, Printer/Location, Amount, and Date.");
-            return;
-        }
-
-        if (type === 'ADD' && printerName !== 'General Stock') {
-            alert("Stock In operations must be logged against 'General Stock'.");
-            return;
-        }
-
-        STOCK_REF.once('value', (snapshot) => {
-            if (!snapshot.exists()) return;
-
-            let currentStockObj = snapshot.val();
-            const inkKey = inkName;
-            let inkData = currentStockObj[inkKey];
-
-            if (!inkData) {
-                alert(`Ink type ${inkName} not found in database.`);
-                return;
-            }
-
-            let newStockLevel = inkData.currentStock;
-            if (type === 'ADD') {
-                newStockLevel += amount;
-            } else if (type === 'USE') {
-                if (inkData.currentStock < amount) {
-                    alert("❌ Insufficient Stock! Current Stock: " + inkData.currentStock.toFixed(2) + " Qty.");
-                    return;
-                }
-                newStockLevel -= amount;
-            }
-            
-            if (newStockLevel < inkData.minLevel) {
-                alert(`⚠️ LOW STOCK WARNING! ${inkName} is now at ${newStockLevel.toFixed(2)} Qty (Min: ${inkData.minLevel}). Please reorder.`);
-            }
-
-            inkData.currentStock = newStockLevel;
-
-            STOCK_REF.child(inkKey).set(inkData)
-                .then(() => {
-                    const newLog = {
-                        date: date,
-                        ink: inkName,
-                        printer: printerName,
-                        type: type === 'ADD' ? 'ADD' : 'USE',
-                        amount: amount,
-                        timestamp: firebase.database.ServerValue.TIMESTAMP
-                    };
-
-                    HISTORY_REF.push(newLog)
-                        .then(() => {
-                            document.getElementById('movementAmount').value = '';
-                            document.getElementById('printerSelect').value = '';
-                            updateMovementButtons();
-                        })
-                        .catch(error => console.error("History Push Error:", error));
-                })
-                .catch(error => console.error("Stock Update Error:", error));
-        });
-    }
-
     function addStock() { handleMovement('ADD'); }
     function useStock() { handleMovement('USE'); }
-
-    // ----------------------------------------------------------------------
-    // 6. ⬇️ EXPORT/CSV FUNCTIONS
-    // ----------------------------------------------------------------------
     
-    function generateCSV(data, filename) {
-        let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Date,Ink Type,Printer/Stock Location,Operation,Amount (Qty)\n";
-
-        data.forEach(log => {
-            const operation = log.type === 'ADD' ? 'Stock Added' : 'Stock Used';
-            const amount = (log.type === 'ADD' ? '+' : '-') + (Math.round(log.amount * 100) / 100);
-            const printer = log.printer || 'N/A';
-
-            const row = [`"${log.date}"`, `"${log.ink}"`, `"${printer}"`, `"${operation}"`, amount];
-            csvContent += row.join(",") + "\n";
-        });
-
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", filename);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    function toggleHistoryVisibility() {
+        const div = document.getElementById('historyTableSection');
+        const btn = document.getElementById('toggleHistoryBtn');
+        div.style.display = div.style.display === 'none' ? 'block' : 'none';
+        btn.innerHTML = div.style.display === 'block' ? '<i class="fas fa-eye"></i> Hide' : '<i class="fas fa-eye-slash"></i> Show';
     }
 
-    function exportCurrentHistory() {
-        HISTORY_REF.once('value', (snapshot) => {
-            const historyObj = snapshot.val();
-            if (!historyObj) {
-                alert("No transactions found to export.");
-                return;
-            }
-
-            const historyLog = Object.values(historyObj);
-            const today = new Date().toISOString().substring(0, 10);
-            generateCSV(historyLog, `Ink_Log_Full_${today}.csv`);
-        });
+    function clearHistory() {
+        if(confirm("Delete all history?")) HISTORY_REF.set(null);
     }
 
     function exportCSV() {
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-
-        if (!startDate || !endDate) {
-            alert("Please select both a Start Date and End Date for the report.");
-            return;
-        }
-
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        end.setHours(23, 59, 59, 999);
-
-        if (start > end) {
-            alert("Start Date cannot be after End Date.");
-            return;
-        }
-
-        HISTORY_REF.once('value', (snapshot) => {
-            const historyObj = snapshot.val();
-            if (!historyObj) {
-                alert("No transactions found.");
-                return;
-            }
-
-            const historyLog = Object.values(historyObj);
-
-            const filteredData = historyLog.filter(log => {
-                const logDate = new Date(log.date);
-                return logDate >= start && logDate <= end;
-            });
-
-            if (filteredData.length === 0) {
-                alert("No transactions found within the selected date range.");
-                return;
-            }
-
-            generateCSV(filteredData, `Ink_Stock_Report_${startDate}_to_${endDate}.csv`);
+        const s = document.getElementById('startDate').value; const e = document.getElementById('endDate').value;
+        if(!s || !e) { alert("Select dates."); return; }
+        const sd = new Date(s), ed = new Date(e); ed.setHours(23,59,59);
+        HISTORY_REF.once('value', snap => {
+            if(!snap.exists()) { alert("No data."); return; }
+            const filtered = Object.values(snap.val()).filter(l => { const d = new Date(l.date); return d>=sd && d<=ed; });
+            if(filtered.length===0) { alert("No data in range."); return; }
+            let csv = "data:text/csv;charset=utf-8,Date,Ink,Location,Op,Qty\n" + filtered.map(l => `"${l.date}","${l.ink}","${l.printer}","${l.type}",${l.type==='ADD'?'+':'-'}${l.amount}`).join("\n");
+            const link = document.createElement("a"); link.href = encodeURI(csv); link.download = "report.csv"; link.click();
+        });
+    }
+    function exportCurrentHistory() {
+        HISTORY_REF.once('value', snap => {
+            if(!snap.exists()) return;
+            let csv = "data:text/csv;charset=utf-8,Date,Ink,Location,Op,Qty\n" + Object.values(snap.val()).map(l => `"${l.date}","${l.ink}","${l.printer}","${l.type}",${l.type==='ADD'?'+':'-'}${l.amount}`).join("\n");
+            const link = document.createElement("a"); link.href = encodeURI(csv); link.download = "full_log.csv"; link.click();
         });
     }
 
-    // ----------------------------------------------------------------------
-    // 7. 🚀 INITIALIZATION
-    // ----------------------------------------------------------------------
-
-    function initializeAppServices() {
-        const today = new Date().toISOString().substring(0, 10);
-        document.getElementById('movementDate').value = today;
-        document.getElementById('startDate').value = today;
-        document.getElementById('endDate').value = today;
-
-        loadAndListenToStock();
-        loadAndListenToHistory();
-        updateMovementButtons();
-        
-        // Hide history section on initial load
-        document.getElementById('historyTableSection').style.display = 'none';
+    function init() {
+        const t = new Date().toISOString().substring(0, 10);
+        document.getElementById('movementDate').value = t;
+        document.getElementById('startDate').value = t;
+        document.getElementById('endDate').value = t;
+        loadAndListenToStock(); loadAndListenToHistory(); updateMovementButtons();
     }
-
-    document.addEventListener('DOMContentLoaded', initializeAppServices);
+    document.addEventListener('DOMContentLoaded', init);
 </script>
-
 </body>
 </html>
